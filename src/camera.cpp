@@ -29,8 +29,14 @@ void Camera::update()
             projection = glm::ortho(0.0f, (float)aspect_ratio, 0.0f, (float)aspect_ratio, 0.0f, 100.0f);
             break;
         case PERSPECTIVE:
+            projection = glm::perspective(50.0f, (float)aspect_ratio, 0.0f, 100.0f);
             break;
     }
+}
+
+void Camera::set_camera_type(CameraType _type)
+{
+    type = _type;
 }
 
 void Camera::getMVP(glm::mat4 &mvp)

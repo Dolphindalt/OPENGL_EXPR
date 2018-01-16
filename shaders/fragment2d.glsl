@@ -1,6 +1,8 @@
 #version 400
 
+in vec3 stuff;
+
 void main()
 {
-    gl_FragColor = vec4(0.2, 0.8, 0.1, 1.0);
+    gl_FragColor = vec4(stuff.x, stuff.y, stuff.z, 1.0);
 }

@@ -1,7 +1,10 @@
 #include <window.h>
 #include <shaders.h>
 #include <square.h>
+#include <cube.h>
 #include <camera.h>
+
+#include <glm/gtx/transform.hpp>
 
 static void init();
 static bool gl_init();
@@ -24,6 +27,7 @@ static void init()
     window_init();
     gl_init();
     quad_init();
+    cube_init();
     camera = Camera(ORTHO, window);
     game_loop();
 }
@@ -65,13 +69,22 @@ static void input()
 static void render()
 {
     window.clear();
+
+    glm::mat4 mvp;
+
+    camera.set_camera_type(ORTHO);
     camera.update();
     shader_start(shader_program);
-    glm::mat4 mvp;
     camera.getMVP(mvp);
     shader_load_mat4(shader_get_uniform_location(shader_program, "MVP"), mvp);
 
+    glm::mat4 model = glm::mat4(1.0f);
+
+    shader_load_mat4(shader_get_uniform_location(shader_program, "model"), model);
     quad_render();
+
+    shader_load_mat4(shader_get_uniform_location(shader_program, "model"), model);
+    cube_render();
 
     shader_stop();
     window.swap_buffer();
@@ -82,4 +95,5 @@ static void clean()
     window_destroy();
     shader_destroy(shader_program);
     quad_destroy();
+    cube_destroy();
 }

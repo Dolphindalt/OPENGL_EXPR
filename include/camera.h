@@ -13,6 +13,7 @@ public:
     Camera(CameraType, WindowData &);
     ~Camera();
     void update();
+    void set_camera_type(CameraType _type);
 
     void getMVP(glm::mat4 &mvp);
 private:
