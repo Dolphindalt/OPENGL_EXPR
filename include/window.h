@@ -9,6 +9,7 @@
 
 typedef struct windowdata {
     SDL_Window *window;
+    int w, h;
 
     void clear()
     {
@@ -23,7 +24,6 @@ typedef struct windowdata {
 
     double get_aspect_ratio()
     {
-        int w, h;
         SDL_GL_GetDrawableSize(window, &w, &h);
         return (double) w / (double) h;
     }

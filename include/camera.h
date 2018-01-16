@@ -17,6 +17,7 @@ public:
     void getMVP(glm::mat4 &mvp);
 private:
     CameraType type;
+    int x, y, width, height;
     double aspect_ratio;
     glm::mat4 projection, view, model;
 };
