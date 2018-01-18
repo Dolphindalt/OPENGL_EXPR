@@ -39,7 +39,8 @@
                 "/usr/include/linux",
                 "/usr/include/c++/7",
                 "/usr/include/x86_64-linux-gnu/c++/7",
-                "/usr/include/c++/7/tr1"
+                "/usr/include/c++/7/tr1",
+                "${workspaceRoot}/lib"
             ],
             "defines": [],
             "intelliSenseMode": "clang-x64",

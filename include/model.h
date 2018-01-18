@@ -3,8 +3,11 @@
 
 #include <GL/glew.h>
 #include <vector>
+#include <map>
 
 using namespace std;
+
+static vector<GLuint> vaos, vbos;
 
 typedef struct naked_model {
     GLuint vao_id;
@@ -24,7 +27,15 @@ static inline void naked_model_draw(NakedModel &model)
     glBindVertexArray(0);
 }
 
-static inline NakedModel load_attribs_to_vao(const std::vector<GLfloat> &vertices, const vector<GLuint> &indices, const vector<GLfloat> &normals, const vector<GLfloat> &texture)
+static inline void naked_model_destroy(NakedModel &model)
+{
+    for(auto i : vaos)
+        glDeleteVertexArrays(1, &i);
+    for(auto& i : vbos)
+        glDeleteBuffers(1, &i);
+}
+
+static inline NakedModel load_attribs_to_vao(const vector<GLfloat> &vertices, const vector<GLfloat> &normals, const vector<GLfloat> &texture, const vector<GLuint> &indices)
 {
     GLuint vao_id;
     glGenVertexArrays(1, &vao_id);
@@ -36,6 +47,8 @@ static inline NakedModel load_attribs_to_vao(const std::vector<GLfloat> &vertice
     store_data_in_attrib_list(1, 2, texture);
     store_data_in_attrib_list(2, 3, normals);
     glBindVertexArray(0);
+    vaos.push_back(vao_id);
+    vbos.push_back(element_vbo_buffer);
     return { vao_id, (GLuint)indices.size() };
 }
 
@@ -47,6 +60,7 @@ static inline void store_data_in_attrib_list(int id, int size, const vector<floa
     glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(data.at(0)), data.data, GL_STATIC_DRAW);
     glVertexAttribPointer(id, size, GL_FLOAT, GL_FALSE, 0, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
+    vbos.push_back(vbo_id);
 }
 
 #endif
