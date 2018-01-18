@@ -39,6 +39,9 @@ static bool gl_init()
     std::string vertex2d_path = "shaders/vertex2d.glsl", fragment2d_path = "shaders/fragment2d.glsl";
     shader_program = shader_init(vertex2d_path, fragment2d_path);
 
+    glEnable(GL_DEPTH_TEST);
+    glDepthFunc(GL_LESS);
+
     return flag;
 }
 
@@ -72,19 +75,25 @@ static void render()
 
     glm::mat4 mvp;
 
-    camera.set_camera_type(ORTHO);
-    camera.update();
     shader_start(shader_program);
+    camera.set_camera_type(PERSPECTIVE);
+    camera.update();
     camera.getMVP(mvp);
     shader_load_mat4(shader_get_uniform_location(shader_program, "MVP"), mvp);
-
     glm::mat4 model = glm::mat4(1.0f);
-
+    model = model * glm::rotate(glm::radians(45.0f), glm::vec3(0, 1, 1));
     shader_load_mat4(shader_get_uniform_location(shader_program, "model"), model);
-    quad_render();
 
-    shader_load_mat4(shader_get_uniform_location(shader_program, "model"), model);
     cube_render();
+
+    camera.set_camera_type(ORTHO);
+    camera.update();
+    camera.getMVP(mvp);
+    shader_load_mat4(shader_get_uniform_location(shader_program, "MVP"), mvp);
+    model = glm::mat4(1.0f);
+    shader_load_mat4(shader_get_uniform_location(shader_program, "model"), model);
+
+    quad_render();
 
     shader_stop();
     window.swap_buffer();

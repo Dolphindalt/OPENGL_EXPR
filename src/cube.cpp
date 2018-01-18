@@ -6,42 +6,42 @@ void cube_init()
 {
     float vertices[] =
     {
-        -.0f,-.0f,-.0f, // triangle 1 : begin
-        -.0f,-.0f, .0f,
-        -.0f, 1.0f, 1.0f, // triangle 1 : end
-        1.0f, 1.0f,-.0f, // triangle 2 : begin
-        -.0f,-.0f,-.0f,
-        -.0f, 1.0f,-.0f, // triangle 2 : end
-        1.0f,-.0f, 1.0f,
-        -.0f,-.0f,-.0f,
-        1.0f,-.0f,-.0f,
-        1.0f, 1.0f,-.0f,
-        1.0f,-.0f,-.0f,
-        -.0f,-.0f,-.0f,
-        -.0f,-.0f,-.0f,
-        -.0f, 1.0f, 1.0f,
-        -.0f, 1.0f,-.0f,
-        1.0f,-.0f, 1.0f,
-        -.0f,-.0f, 1.0f,
-        -.0f,-.0f,-.0f,
-        -.0f, 1.0f, 1.0f,
-        -.0f,-.0f, 1.0f,
-        1.0f,-.0f, 1.0f,
+        -1.0f,-1.0f,-1.0f, // triangle 1 : begin
+        -1.0f,-1.0f, 1.0f,
+        -1.0f, 1.0f, 1.0f, // triangle 1 : end
+        1.0f, 1.0f,-1.0f, // triangle 2 : begin
+        -1.0f,-1.0f,-1.0f,
+        -1.0f, 1.0f,-1.0f, // triangle 2 : end
+        1.0f,-1.0f, 1.0f,
+        -1.0f,-1.0f,-1.0f,
+        1.0f,-1.0f,-1.0f,
+        1.0f, 1.0f,-1.0f,
+        1.0f,-1.0f,-1.0f,
+        -1.0f,-1.0f,-1.0f,
+        -1.0f,-1.0f,-1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f,-1.0f,
+        1.0f,-1.0f, 1.0f,
+        -1.0f,-1.0f, 1.0f,
+        -1.0f,-1.0f,-1.0f,
+        -1.0f, 1.0f, 1.0f,
+        -1.0f,-1.0f, 1.0f,
+        1.0f,-1.0f, 1.0f,
         1.0f, 1.0f, 1.0f,
-        1.0f,-.0f,-.0f,
-        1.0f, 1.0f,-.0f,
-        1.0f,-.0f,-.0f,
+        1.0f,-1.0f,-1.0f,
+        1.0f, 1.0f,-1.0f,
+        1.0f,-1.0f,-1.0f,
         1.0f, 1.0f, 1.0f,
-        1.0f,-.0f, 1.0f,
+        1.0f,-1.0f, 1.0f,
         1.0f, 1.0f, 1.0f,
-        1.0f, 1.0f,-.0f,
-        -.0f, 1.0f,-.0f,
+        1.0f, 1.0f,-1.0f,
+        -1.0f, 1.0f,-1.0f,
         1.0f, 1.0f, 1.0f,
-        -.0f, 1.0f,-.0f,
-        -.0f, 1.0f, 1.0f,
+        -1.0f, 1.0f,-1.0f,
+        -1.0f, 1.0f, 1.0f,
         1.0f, 1.0f, 1.0f,
-        -.0f, 1.0f, 1.0f,
-        1.0f,-.0f, 1.0f
+        -1.0f, 1.0f, 1.0f,
+        1.0f,-1.0f, 1.0f
     };
 
     cube.vertex_count = 36;
@@ -51,18 +51,19 @@ void cube_init()
     GLuint vbo_id;
     glGenBuffers(1, &vbo_id);
     glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
-    glBufferData(GL_ARRAY_BUFFER, 108 * sizeof(float), vertices, GL_STATIC_DRAW);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
     glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 0, 0);
 
-    glEnableVertexAttribArray(0);
-    glBindVertexArray(0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
 }
 
 void cube_render()
 {
     glBindVertexArray(cube.vao_id);
+    glEnableVertexAttribArray(0);
     glDrawArrays(GL_TRIANGLES, 0, cube.vertex_count);
+    glDisableVertexAttribArray(0);
     glBindVertexArray(0);
 }
 

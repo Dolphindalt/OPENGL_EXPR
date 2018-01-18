@@ -29,7 +29,7 @@ void Camera::update()
             projection = glm::ortho(0.0f, (float)aspect_ratio, 0.0f, (float)aspect_ratio, 0.0f, 100.0f);
             break;
         case PERSPECTIVE:
-            projection = glm::perspective(50.0f, (float)aspect_ratio, 0.0f, 100.0f);
+            projection = glm::perspective(glm::radians(50.0f), (float)aspect_ratio, 0.1f, 100.0f);
             break;
     }
 }

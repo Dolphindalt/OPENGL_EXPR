@@ -9,6 +9,6 @@ out vec3 stuff;
 
 void main()
 {
-    gl_Position = MVP * vec4(vertex_position.xyz, 1);
+    gl_Position = MVP * model * vec4(vertex_position.xyz, 1);
     stuff = vertex_position;
 }
