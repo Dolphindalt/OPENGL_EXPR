@@ -1,6 +1,6 @@
 #include <window.h>
 #include <shaders.h>
-#include <square.h>
+#include <quad.h>
 #include <cube.h>
 #include <camera.h>
 

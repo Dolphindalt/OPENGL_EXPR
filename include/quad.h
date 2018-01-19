@@ -1,5 +1,5 @@
-#ifndef SQUARE_H
-#define SQUARE_H
+#ifndef QUAD_H
+#define QUAD_H
 
 #include <GL/glew.h>
 
@@ -7,8 +7,6 @@ typedef struct quad {
     GLuint vao_id;
     unsigned int vertex_count;
 } Quad;
-
-extern Quad quad;
 
 void quad_init();
 
