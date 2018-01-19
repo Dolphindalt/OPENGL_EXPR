@@ -95,6 +95,12 @@ static void render()
 
     quad_render();
 
+    model = glm::mat4(1.0f);
+    model = glm::translate(model, glm::vec3(0.5f, 0.5f, 0.0f));
+    shader_load_mat4(shader_get_uniform_location(shader_program, "model"), model);
+
+    quad_render();
+
     shader_stop();
     window.swap_buffer();
 }
