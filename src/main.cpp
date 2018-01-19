@@ -32,7 +32,7 @@ static void init()
     quad_init();
     cube_init();
     camera = Camera(ORTHO, window);
-    dragon = loadModel("assets/dragon.obj");
+    dragon = load_model("assets/dragon.obj");
     game_loop();
 }
 
@@ -102,7 +102,7 @@ static void render()
     shader_load_mat4(shader_get_uniform_location(shader_program2d, "MVP"), mvp);
     model = glm::mat4(1.0f);
     model = model * glm::rotate(glm::radians(45.0f), glm::vec3(0, 1, -1));
-    model = glm::translate(model, glm::vec3(1, 1, 2));
+    model = glm::translate(model, glm::vec3(0, 5, 5));
     shader_load_mat4(shader_get_uniform_location(shader_program2d, "model"), model);
 
     cube_render();

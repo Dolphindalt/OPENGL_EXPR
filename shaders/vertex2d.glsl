@@ -1,6 +1,6 @@
 #version 400
 
-in vec3 vertex_position;
+layout (location = 0) in vec3 vertex_position;
 
 uniform mat4 MVP;
 uniform mat4 model;

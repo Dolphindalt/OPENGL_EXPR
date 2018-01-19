@@ -12,7 +12,7 @@ Camera::Camera(CameraType _type, WindowData &windowData)
     y = 0;
     width = windowData.w;
     height = windowData.h;
-    view = glm::lookAt(glm::vec3(0, 0, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    view = glm::lookAt(glm::vec3(0, 0, 15), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     model = glm::mat4(1.0f);
 }
 
