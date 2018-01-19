@@ -12,7 +12,7 @@ Camera::Camera(CameraType _type, WindowData &windowData)
     y = 0;
     width = windowData.w;
     height = windowData.h;
-    view = glm::lookAt(glm::vec3(0, 0, 5), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
+    view = glm::lookAt(glm::vec3(0, 0, 10), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
     model = glm::mat4(1.0f);
 }
 
@@ -26,10 +26,10 @@ void Camera::update()
     switch(type)
     {
         case ORTHO:
-            projection = glm::ortho(0.0f, (float)aspect_ratio, 0.0f, (float)aspect_ratio, 0.0f, 100.0f);
+            projection = glm::ortho(-1.0f, float(aspect_ratio), -1.0f, float(aspect_ratio), 0.0f, 100.0f);
             break;
         case PERSPECTIVE:
-            projection = glm::perspective(glm::radians(50.0f), (float)aspect_ratio, 0.1f, 100.0f);
+            projection = glm::perspective(glm::radians(50.0f), float(aspect_ratio), 0.1f, 100.0f);
             break;
     }
 }

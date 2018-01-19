@@ -14,20 +14,32 @@ typedef struct naked_model {
     unsigned int indices;
 } NakedModel;
 
-static inline void naked_model_draw(NakedModel &model)
+static inline void store_data_in_attrib_list(int id, int size, void *data, int data_size)
+{
+    GLuint vbo_id;
+    glGenBuffers(1, &vbo_id);
+    glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
+    glBufferData(GL_ARRAY_BUFFER, data_size, data, GL_STATIC_DRAW);
+    glEnableVertexAttribArray(id);
+    glVertexAttribPointer(id, size, GL_FLOAT, GL_FALSE, 0, 0);
+    glBindBuffer(GL_ARRAY_BUFFER, 0);
+    vbos.push_back(vbo_id);
+}
+
+static inline void naked_model_render(NakedModel &model)
 {
     glBindVertexArray(model.vao_id);
     glEnableVertexAttribArray(0);
     glEnableVertexAttribArray(1);
     glEnableVertexAttribArray(2);
-    glDrawArrays(GL_TRIANGLES, 0, model.indices);
+    glDrawElements(GL_TRIANGLES, model.indices, GL_UNSIGNED_INT, 0);
     glDisableVertexAttribArray(0);
     glDisableVertexAttribArray(1);
     glDisableVertexAttribArray(2);
     glBindVertexArray(0);
 }
 
-static inline void naked_model_destroy(NakedModel &model)
+static inline void naked_model_destroy()
 {
     for(auto i : vaos)
         glDeleteVertexArrays(1, &i);
@@ -35,32 +47,24 @@ static inline void naked_model_destroy(NakedModel &model)
         glDeleteBuffers(1, &i);
 }
 
-static inline NakedModel load_attribs_to_vao(const vector<GLfloat> &vertices, const vector<GLfloat> &normals, const vector<GLfloat> &texture, const vector<GLuint> &indices)
+static inline NakedModel load_attribs_to_vao(vector<glm::vec3> vertices, vector<glm::vec2> texture, vector<glm::vec3> normals, vector<int> indices)
 {
     GLuint vao_id;
     glGenVertexArrays(1, &vao_id);
     GLuint element_vbo_buffer;
     glGenBuffers(1, &element_vbo_buffer);
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, element_vbo_buffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(GLuint), &indices[0], GL_STATIC_DRAW);
-    store_data_in_attrib_list(0, 3, vertices);
-    store_data_in_attrib_list(1, 2, texture);
-    store_data_in_attrib_list(2, 3, normals);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(indices.at(0)), indices.data(), GL_STATIC_DRAW);
+    store_data_in_attrib_list(0, 3, &vertices[0], vertices.size() * sizeof(glm::vec3));
+    store_data_in_attrib_list(1, 2, &texture[0], texture.size() * sizeof(glm::vec2));
+    store_data_in_attrib_list(2, 3, &normals[0], normals.size() * sizeof(glm::vec3));
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
     glBindVertexArray(0);
     vaos.push_back(vao_id);
     vbos.push_back(element_vbo_buffer);
     return { vao_id, (GLuint)indices.size() };
-}
-
-static inline void store_data_in_attrib_list(int id, int size, const vector<float> &data)
-{
-    GLuint vbo_id;
-    glGenBuffers(1, &vbo_id);
-    glBindBuffer(GL_ARRAY_BUFFER, vbo_id);
-    glBufferData(GL_ARRAY_BUFFER, data.size() * sizeof(data.at(0)), data.data, GL_STATIC_DRAW);
-    glVertexAttribPointer(id, size, GL_FLOAT, GL_FALSE, 0, 0);
-    glBindBuffer(GL_ARRAY_BUFFER, 0);
-    vbos.push_back(vbo_id);
 }
 
 #endif
