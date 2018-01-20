@@ -5,7 +5,7 @@
 #include <string>
 #include <glm/glm.hpp>
 
-GLuint shader_init(std::string &vertex_path, std::string &fragment_path);
+GLuint shader_init(const std::string &vertex_path, const std::string &fragment_path);
 void shader_start(GLuint id);
 void shader_stop();
 GLuint shader_get_uniform_location(GLuint id, const char *name);

@@ -5,8 +5,12 @@
 #include <cstdio>
 #include <cstdlib>
 #include <cassert>
+#include <string>
+#include <map>
 
-bool read_file_to_buffer(std::string &path, std::vector<unsigned char> &buffer)
+std::map<const std::string, Texture*> textures;
+
+bool read_file_to_buffer(const std::string &path, std::vector<unsigned char> &buffer)
 {
     std::ifstream file(path, std::ios::binary);
     if(file.fail()) return false;
@@ -20,7 +24,7 @@ bool read_file_to_buffer(std::string &path, std::vector<unsigned char> &buffer)
     return true;
 }
 
-bool read_file_to_buffer(std::string &path, std::string &buffer)
+bool read_file_to_buffer(const std::string &path, std::string &buffer)
 {
     std::ifstream file(path, std::ios::binary);
     if(file.fail()) return false;
@@ -34,7 +38,7 @@ bool read_file_to_buffer(std::string &path, std::string &buffer)
     return true;
 }
 
-GLuint load_png(std::string &path)
+GLuint load_png(const std::string &path)
 {
     GLuint id;
     std::vector<unsigned char> in, out;
@@ -63,4 +67,17 @@ GLuint load_png(std::string &path)
 
     assert(id > 0);
     return id;
+}
+
+Texture *get_texture(const std::string &path)
+{
+    auto res = textures.find(path);
+    if(res == textures.end())
+    {
+        Texture *texture = new Texture();
+        texture->texture_id = load_png(path);
+        textures.insert(make_pair(path, texture));
+        return texture;
+    }
+    return res->second;
 }

@@ -13,6 +13,7 @@
 #include <glm/glm.hpp>
 #include <map>
 #include <string.h>
+#include <resources.h>
 
 using namespace std;
 
@@ -143,6 +144,14 @@ static inline NakedModel load_model(const string &path)
     fclose(obj_file);
 
     return load_attribs_to_vao(indexed_vertices, indexed_uvs, indexed_normals, indices);
+}
+
+static inline TexturedModel load_textured_model(const string &model_path, const string &texture_path)
+{
+    TexturedModel model;
+    model.model = load_model(model_path);
+    model.texture = get_texture(texture_path);
+    return model;
 }
 
 #endif

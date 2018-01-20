@@ -4,6 +4,7 @@
 #include <GL/glew.h>
 #include <vector>
 #include <map>
+#include <resources.h>
 
 using namespace std;
 
@@ -13,6 +14,11 @@ typedef struct naked_model {
     GLuint vao_id;
     size_t indices;
 } NakedModel;
+
+typedef struct textured_model {
+    NakedModel model;
+    Texture *texture;
+} TexturedModel;
 
 static inline void store_data_in_attrib_list(int id, int size, void *data, int data_size)
 {
@@ -24,6 +30,21 @@ static inline void store_data_in_attrib_list(int id, int size, void *data, int d
     glVertexAttribPointer(id, size, GL_FLOAT, GL_FALSE, 0, 0);
     glBindBuffer(GL_ARRAY_BUFFER, 0);
     vbos.push_back(vbo_id);
+}
+
+static inline void textured_model_render(TexturedModel &model)
+{
+    glBindVertexArray(model.model.vao_id);
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, model.texture->texture_id);
+    glEnableVertexAttribArray(0);
+    glEnableVertexAttribArray(1);
+    glEnableVertexAttribArray(2);
+    glDrawElements(GL_TRIANGLES, model.model.indices, GL_UNSIGNED_SHORT, (void *)0);
+    glDisableVertexAttribArray(0);
+    glDisableVertexAttribArray(1);
+    glDisableVertexAttribArray(2);
+    glBindVertexArray(0);
 }
 
 static inline void naked_model_render(NakedModel &model)

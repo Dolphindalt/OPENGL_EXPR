@@ -18,7 +18,7 @@ static void clean();
 bool running = true;
 GLuint shader_program2d, shader_program3d;
 Camera camera;
-NakedModel dragon;
+TexturedModel dragon;
 glm::mat4 static_model = glm::mat4(1.0f) * glm::scale(glm::vec3(0.1f, 0.1f, 0.1f)), static_cube_model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 5, 8));
 
 int main()
@@ -34,7 +34,7 @@ static void init()
     cube_init();
     camera = Camera(ORTHO, window);
     //dragon = load_model("assets/effel-tower.obj");
-    dragon = load_model("assets/Cirno.obj");
+    dragon = load_textured_model("assets/Cirno.obj", "assets/textures/Cirno.png");
     game_loop();
 }
 
@@ -42,10 +42,10 @@ static bool gl_init()
 {
     bool flag = true;
 
-    std::string vertex2d_path = "shaders/vertex2d.glsl", fragment2d_path = "shaders/fragment2d.glsl";
+    const std::string vertex2d_path = "shaders/vertex2d.glsl", fragment2d_path = "shaders/fragment2d.glsl";
     shader_program2d = shader_init(vertex2d_path, fragment2d_path);
 
-    std::string vertex3d_path = "shaders/vertex3d.glsl", fragment3d_path = "shaders/fragment3d.glsl";
+    const std::string vertex3d_path = "shaders/vertex3d.glsl", fragment3d_path = "shaders/fragment3d.glsl";
     shader_program3d = shader_init(vertex3d_path, fragment3d_path);
 
     glEnable(GL_DEPTH_TEST);
@@ -93,7 +93,7 @@ static void render()
     static_model = static_model * glm::rotate(glm::radians(1.0f), glm::vec3(0, 1, 0));
     shader_load_mat4(shader_get_uniform_location(shader_program3d, "model"), static_model);
 
-    naked_model_render(dragon);
+    textured_model_render(dragon);
 
     shader_stop();
 

@@ -5,8 +5,13 @@
 #include <vector>
 #include <string>
 
-bool read_file_to_buffer(std::string &path, std::vector<unsigned char> &buffer);
-bool read_file_to_buffer(std::string &path, std::string &buffer);
+typedef struct texture {
+    GLuint texture_id;
+} Texture;
+
+bool read_file_to_buffer(const std::string &path, std::vector<unsigned char> &buffer);
+bool read_file_to_buffer(const std::string &path, std::string &buffer);
 GLuint load_png(std::string &path);
+Texture *get_texture(const std::string &path);
 
 #endif

@@ -8,7 +8,7 @@
 
 static void shader_compile(const char *src, GLuint &id);
 
-GLuint shader_init(std::string &vertex_path, std::string &fragment_path)
+GLuint shader_init(const std::string &vertex_path, const std::string &fragment_path)
 {
     GLuint vertex_shader_id = glCreateShader(GL_VERTEX_SHADER);
     GLuint fragment_shader_id = glCreateShader(GL_FRAGMENT_SHADER);
