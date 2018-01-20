@@ -19,6 +19,7 @@ bool running = true;
 GLuint shader_program2d, shader_program3d;
 Camera camera;
 NakedModel dragon;
+glm::mat4 static_model = glm::mat4(1.0f) * glm::scale(glm::vec3(0.1f, 0.1f, 0.1f)), static_cube_model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 5, 8));
 
 int main()
 {
@@ -32,7 +33,8 @@ static void init()
     quad_init();
     cube_init();
     camera = Camera(ORTHO, window);
-    dragon = load_model("assets/dragon.obj");
+    //dragon = load_model("assets/effel-tower.obj");
+    dragon = load_model("assets/Cirno.obj");
     game_loop();
 }
 
@@ -88,8 +90,8 @@ static void render()
     camera.update();
     camera.getMVP(mvp);
     shader_load_mat4(shader_get_uniform_location(shader_program3d, "MVP"), mvp);
-    glm::mat4 model = glm::mat4(1.0f);
-    shader_load_mat4(shader_get_uniform_location(shader_program3d, "model"), model);
+    static_model = static_model * glm::rotate(glm::radians(1.0f), glm::vec3(0, 1, 0));
+    shader_load_mat4(shader_get_uniform_location(shader_program3d, "model"), static_model);
 
     naked_model_render(dragon);
 
@@ -100,10 +102,8 @@ static void render()
     camera.update();
     camera.getMVP(mvp);
     shader_load_mat4(shader_get_uniform_location(shader_program2d, "MVP"), mvp);
-    model = glm::mat4(1.0f);
-    model = model * glm::rotate(glm::radians(45.0f), glm::vec3(0, 1, -1));
-    model = glm::translate(model, glm::vec3(0, 5, 5));
-    shader_load_mat4(shader_get_uniform_location(shader_program2d, "model"), model);
+    static_cube_model = static_cube_model * glm::rotate(glm::radians(1.0f), glm::vec3(0, 1, -1));
+    shader_load_mat4(shader_get_uniform_location(shader_program2d, "model"), static_cube_model);
 
     cube_render();
 
@@ -111,7 +111,7 @@ static void render()
     camera.update();
     camera.getMVP(mvp);
     shader_load_mat4(shader_get_uniform_location(shader_program2d, "MVP"), mvp);
-    model = glm::mat4(1.0f);
+    glm::mat4 model = glm::mat4(1.0f);
     shader_load_mat4(shader_get_uniform_location(shader_program2d, "model"), model);
 
     //quad_render();
