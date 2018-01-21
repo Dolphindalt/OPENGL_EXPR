@@ -13,6 +13,6 @@ out vec3 surface_normal;
 void main()
 {
     gl_Position = MVP * model * vec4(vertex_position.xyz, 1);
-    uv_cords = passing_uv_cords;
+    uv_cords = vec2(passing_uv_cords.x, -passing_uv_cords.y);
     surface_normal = passing_surface_normal;
 }

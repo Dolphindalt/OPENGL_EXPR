@@ -34,7 +34,7 @@ static void init()
     cube_init();
     camera = Camera(ORTHO, window);
     //dragon = load_model("assets/effel-tower.obj");
-    dragon = load_textured_model("assets/Cirno.obj", "assets/textures/Cirno.png");
+    dragon = load_textured_model("assets/fish.obj", "assets/textures/fish.png");
     game_loop();
 }
 
@@ -85,6 +85,9 @@ static void render()
     glm::mat4 mvp;
 
     shader_start(shader_program3d); // advanced 3d shaders
+
+    GLuint sampler = shader_get_uniform_location(shader_program3d, "mysampler");
+    glUniform1i(sampler, 0);
 
     camera.set_camera_type(PERSPECTIVE);
     camera.update();
