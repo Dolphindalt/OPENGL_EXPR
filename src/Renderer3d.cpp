@@ -14,6 +14,7 @@ Renderer3d::~Renderer3d()
 
 void Renderer3d::render()
 {
+    glEnable(GL_CULL_FACE);
     shader_start(_shader_program);
 
     GLuint sampler = shader_get_uniform_location(_shader_program, "mysampler");
@@ -32,9 +33,10 @@ void Renderer3d::render()
     }
 
     shader_stop();
+    glDisable(GL_CULL_FACE);
 }
 
-void Renderer3d::add_entity(Entity *entity)
+void Renderer3d::add_entity(Entity3D *entity)
 {
     _entities.push_back(entity);
 }

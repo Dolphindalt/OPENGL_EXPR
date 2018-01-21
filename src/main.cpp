@@ -8,6 +8,7 @@
 #include <Entity.h>
 #include <glm/gtx/transform.hpp>
 #include <Renderer3d.h>
+#include <Renderer2d.h>
 
 static void init();
 static bool gl_init();
@@ -19,9 +20,11 @@ static void clean();
 
 bool running = true;
 GLuint shader_program2d, shader_program3d;
-Camera camera;
-Entity* dragon;
+Camera camera_p, camera_o;
+Entity3D *dragon;
+Entity2D *grass, *grass2;
 Renderer3d *renderer3d;
+Renderer2d *renderer2d;
 
 int main()
 {
@@ -33,13 +36,26 @@ static void init()
     window_init();
     gl_init();
     quad_init();
-    camera = Camera(PERSPECTIVE, window);
+    camera_p = Camera(PERSPECTIVE, window);
+    camera_o = Camera(ORTHO, window);
+
     TexturedModel tm = load_textured_model("assets/fish.obj", "assets/textures/fish.png");
     dragon = new Entity3D(tm);
-    dragon->set_velocity(0.2f, 0.0f, 0.0f);
+    dragon->set_velocity(0.5f, 0.0f, 0.0f);
     dragon->set_scale(0.1f);
-    renderer3d = new Renderer3d(shader_program3d, camera);
+
+    renderer3d = new Renderer3d(shader_program3d, camera_p);
     renderer3d->add_entity(dragon);
+
+    grass = new Entity2D("assets/textures/grass.png");
+    grass->set_position(-1.0f, -1.0f, 0.0f);
+    grass2 = new Entity2D("assets/textures/grass.png");
+    grass2->set_position(0.0, -1.0f, 0.0);
+
+    renderer2d = new Renderer2d(shader_program2d, camera_o);
+    renderer2d->add_entity(grass);
+    renderer2d->add_entity(grass2);
+
     game_loop();
 }
 
@@ -87,10 +103,16 @@ static void input()
 
 static void update()
 {
-    if(dragon->get_position().x >= 10)
-        dragon->set_velocity(-0.2, 0.0, 0.0);
-    else if(dragon->get_position().x <= -10)
-        dragon->set_velocity(0.2, 0.0, 0.0);
+    if(dragon->get_position().x >= 30)
+    {
+        dragon->set_velocity(-0.5, 0.0, 0.0);
+        dragon->set_rotation(45.0, 90.0, 0.0);
+    }
+    else if(dragon->get_position().x <= -30)
+    {
+        dragon->set_velocity(0.5, 0.0, 0.0);
+        dragon->set_rotation(0.0, 0.0, 0.0);
+    }
 }
 
 static void render()
@@ -99,24 +121,7 @@ static void render()
 
     renderer3d->render();
 
-    shader_start(shader_program2d); // begin 2d rendering and basic 3d rendering
-
-    /*camera.set_camera_type(ORTHO);
-    camera.update();
-
-    camera.getView(view);
-    camera.getProjection(projection);
-    proj_loc = shader_get_uniform_location(shader_program2d, "projection");
-    view_loc = shader_get_uniform_location(shader_program2d, "view");
-    shader_load_mat4(proj_loc, projection);
-    shader_load_mat4(view_loc, view);
-
-    glm::mat4 model = glm::mat4(1.0f);
-    shader_load_mat4(shader_get_uniform_location(shader_program2d, "model"), model);
-
-    quad_render();*/
-
-    shader_stop();
+    renderer2d->render();
 
     window.swap_buffer();
 }
@@ -129,6 +134,8 @@ static void clean()
     quad_destroy();
     delete dragon;
     delete renderer3d;
+    delete grass;
+    delete grass2;
     naked_model_destroy();
     resources_destroy();
 }

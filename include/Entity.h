@@ -13,6 +13,10 @@ public:
     void update();
     virtual void render() = 0;
 
+    void set_position(float x, float y, float z);
+    void set_position(glm::vec3 nv);
+    void set_rotation(float x, float y, float z);
+    void set_rotation(glm::vec3 nv);
     void set_scale(float s);
     void set_velocity(float x, float y, float z);
     void set_velocity(glm::vec3 nv);
@@ -44,6 +48,7 @@ class Entity2D : public Entity
 {
 public:
     Entity2D(Texture *texture);
+    Entity2D(const std::string &texture_path);
     void render();
 private:
     Texture *_texture;

@@ -2,6 +2,7 @@
 
 #include <glm/gtx/transform.hpp>
 #include <quad.h>
+#include <resources.h>
 
 Entity::Entity() : _matrix_needs_update(true), _velocity_zero(true), _position(glm::vec3(0.0f)), _rotation(glm::vec3(0.0f)), _scale(glm::vec3(1.0f)), _velocity(glm::vec3(0.0f))
 {
@@ -37,6 +38,28 @@ void Entity::build_model_matrix()
     _model_matrix = _model_matrix * glm::translate(_position);
 
     _matrix_needs_update = false;
+}
+
+void Entity::set_position(float x, float y, float z)
+{
+    _position = glm::vec3(x, y, z);
+    _matrix_needs_update = true;
+}
+
+void Entity::set_position(glm::vec3 nv)
+{
+    _position = nv;
+    _matrix_needs_update = true;
+}
+
+void Entity::set_rotation(float x, float y, float z)
+{
+    _rotation = glm::vec3(glm::radians(x), glm::radians(y), glm::radians(z));
+}
+
+void Entity::set_rotation(glm::vec3 nv)
+{
+    _rotation = nv;
 }
 
 void Entity::set_scale(float s)
@@ -84,6 +107,8 @@ glm::mat4 Entity::get_model() const
     return _model_matrix;
 }
 
+// BEGIN ENTITY3D
+
 Entity3D::Entity3D(TexturedModel &texturedmodel) : Entity(), _texturedmodel(texturedmodel)
 {
 
@@ -94,12 +119,22 @@ void Entity3D::render()
     textured_model_render(_texturedmodel);
 }
 
+// BEGIN ENTITY2D
+
 Entity2D::Entity2D(Texture *texture) : Entity(), _texture(texture)
 {
 
 }
 
+Entity2D::Entity2D(const std::string &texture_path) : Entity()
+{
+    _texture = get_texture(texture_path);
+}
+
 void Entity2D::render()
 {
+    glActiveTexture(GL_TEXTURE0);
+    glBindTexture(GL_TEXTURE_2D, _texture->texture_id);
     quad_render();
+    glBindTexture(GL_TEXTURE_2D, 0);
 }

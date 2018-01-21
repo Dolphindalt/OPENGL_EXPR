@@ -1,8 +1,12 @@
 #version 400
 
-in vec3 stuff;
+in vec2 uv_cords;
+
+uniform sampler2D mysampler;
+
+out vec4 color;
 
 void main()
 {
-    gl_FragColor = vec4(stuff.x, stuff.y, stuff.z, 1.0);
+    color = texture(mysampler, uv_cords).rgba;
 }

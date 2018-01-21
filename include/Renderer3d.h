@@ -13,11 +13,11 @@ public:
     ~Renderer3d();
 
     void render();
-    void add_entity(Entity *entity);
+    void add_entity(Entity3D *entity);
 private:
     GLuint _shader_program;
     Camera _camera;
-    std::vector<Entity2D *> _entities;
+    std::vector<Entity3D *> _entities;
 };
 
 #endif
