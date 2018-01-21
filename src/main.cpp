@@ -34,6 +34,7 @@ int main()
 static void init()
 {
     window_init();
+    window.set_clear_color(0.1, 0.3, 0.7, 1.0);
     gl_init();
     quad_init();
     camera_p = Camera(PERSPECTIVE, window);
@@ -106,7 +107,7 @@ static void update()
     if(dragon->get_position().x >= 30)
     {
         dragon->set_velocity(-0.5, 0.0, 0.0);
-        dragon->set_rotation(45.0, 90.0, 0.0);
+        dragon->set_rotation(0.0, 90.0, 0.0);
     }
     else if(dragon->get_position().x <= -30)
     {

@@ -10,11 +10,20 @@
 typedef struct windowdata {
     SDL_Window *window;
     int w, h;
+    float _r = 0.0, _g = 0.0, _b = 0.0, _a = 1.0;
+
+    void set_clear_color(float r, float g, float b, float a)
+    {
+        _r = r;
+        _g = g;
+        _b = b;
+        _a = a;
+    }
 
     void clear()
     {
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-        glClearColor(0.0, 0.0, 0.0, 1.0);
+        glClearColor(_r, _g, _b, _a);
     }
 
     void swap_buffer()
