@@ -3,6 +3,7 @@
 
 #include <glm/glm.hpp>
 #include <window.h>
+#include <string>
 
 enum CameraType { ORTHO, PERSPECTIVE };
 
@@ -13,6 +14,7 @@ public:
     Camera(CameraType, WindowData &);
     ~Camera();
     void update();
+    void load_view_and_projection(GLuint &program, const std::string &viewstr, const std::string &projectionstr);
     void set_camera_type(CameraType _type);
 
     void getView(glm::mat4 &v);

@@ -6,8 +6,8 @@
 #include <objloader.h>
 #include <resources.h>
 #include <Entity.h>
-
 #include <glm/gtx/transform.hpp>
+#include <Renderer3d.h>
 
 static void init();
 static bool gl_init();
@@ -21,6 +21,7 @@ bool running = true;
 GLuint shader_program2d, shader_program3d;
 Camera camera;
 Entity* dragon;
+Renderer3d *renderer3d;
 
 int main()
 {
@@ -32,11 +33,13 @@ static void init()
     window_init();
     gl_init();
     quad_init();
-    camera = Camera(ORTHO, window);
+    camera = Camera(PERSPECTIVE, window);
     TexturedModel tm = load_textured_model("assets/fish.obj", "assets/textures/fish.png");
-    dragon = new Entity(tm);
+    dragon = new Entity3D(tm);
     dragon->set_velocity(0.2f, 0.0f, 0.0f);
     dragon->set_scale(0.1f);
+    renderer3d = new Renderer3d(shader_program3d, camera);
+    renderer3d->add_entity(dragon);
     game_loop();
 }
 
@@ -84,8 +87,6 @@ static void input()
 
 static void update()
 {
-    dragon->update();
-    
     if(dragon->get_position().x >= 10)
         dragon->set_velocity(-0.2, 0.0, 0.0);
     else if(dragon->get_position().x <= -10)
@@ -96,29 +97,7 @@ static void render()
 {
     window.clear();
 
-    glm::mat4 projection, view;
-
-    shader_start(shader_program3d); // advanced 3d shaders
-
-    GLuint sampler = shader_get_uniform_location(shader_program3d, "mysampler");
-    glUniform1i(sampler, 0);
-
-    camera.set_camera_type(PERSPECTIVE);
-    camera.update();
-
-    GLuint view_loc = shader_get_uniform_location(shader_program3d, "view"),
-    proj_loc = shader_get_uniform_location(shader_program3d, "projection");
-
-    camera.getView(view);
-    camera.getProjection(projection);
-    shader_load_mat4(view_loc, view);
-    shader_load_mat4(proj_loc, projection);
-
-    shader_load_mat4(shader_get_uniform_location(shader_program3d, "model"), dragon->get_model());
-
-    dragon->render();
-
-    shader_stop();
+    renderer3d->render();
 
     shader_start(shader_program2d); // begin 2d rendering and basic 3d rendering
 
@@ -149,6 +128,7 @@ static void clean()
     shader_destroy(shader_program3d);
     quad_destroy();
     delete dragon;
+    delete renderer3d;
     naked_model_destroy();
     resources_destroy();
 }

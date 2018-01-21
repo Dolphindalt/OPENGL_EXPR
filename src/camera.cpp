@@ -1,6 +1,7 @@
 #include <camera.h>
 
 #include <glm/gtx/transform.hpp>
+#include <shaders.h>
 
 Camera::Camera() {}
 
@@ -32,6 +33,15 @@ void Camera::update()
             break;
     }
 }
+
+void Camera::load_view_and_projection(GLuint &program, const std::string &viewstr, const std::string &projectionstr)
+{
+    GLuint view_loc = shader_get_uniform_location(program, viewstr.c_str()),
+    proj_loc = shader_get_uniform_location(program, projectionstr.c_str());
+    shader_load_mat4(view_loc, view);
+    shader_load_mat4(proj_loc, projection);
+}
+
 
 void Camera::set_camera_type(CameraType _type)
 {

@@ -1,8 +1,9 @@
 #include <Entity.h>
 
 #include <glm/gtx/transform.hpp>
+#include <quad.h>
 
-Entity::Entity(TexturedModel &model) : _model(model), _matrix_needs_update(true), _velocity_zero(true), _position(glm::vec3(0.0f)), _rotation(glm::vec3(0.0f)), _scale(glm::vec3(1.0f)), _velocity(glm::vec3(0.0f))
+Entity::Entity() : _matrix_needs_update(true), _velocity_zero(true), _position(glm::vec3(0.0f)), _rotation(glm::vec3(0.0f)), _scale(glm::vec3(1.0f)), _velocity(glm::vec3(0.0f))
 {
     build_model_matrix();
 }
@@ -19,11 +20,6 @@ void Entity::update()
     {
         build_model_matrix();
     }
-}
-
-void Entity::render()
-{
-    textured_model_render(_model);
 }
 
 void Entity::build_model_matrix()
@@ -86,4 +82,24 @@ glm::vec3 Entity::get_velocity() const
 glm::mat4 Entity::get_model() const
 {
     return _model_matrix;
+}
+
+Entity3D::Entity3D(TexturedModel &texturedmodel) : Entity(), _texturedmodel(texturedmodel)
+{
+
+}
+
+void Entity3D::render()
+{
+    textured_model_render(_texturedmodel);
+}
+
+Entity2D::Entity2D(Texture *texture) : Entity(), _texture(texture)
+{
+
+}
+
+void Entity2D::render()
+{
+    quad_render();
 }
