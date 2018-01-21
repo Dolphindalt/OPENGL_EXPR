@@ -5,6 +5,7 @@
 #include <vector>
 #include <map>
 #include <resources.h>
+#include <glm/glm.hpp>
 
 using namespace std;
 

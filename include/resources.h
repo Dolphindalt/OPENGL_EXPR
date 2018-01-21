@@ -13,5 +13,6 @@ bool read_file_to_buffer(const std::string &path, std::vector<unsigned char> &bu
 bool read_file_to_buffer(const std::string &path, std::string &buffer);
 GLuint load_png(std::string &path);
 Texture *get_texture(const std::string &path);
+void resources_destroy();
 
 #endif

@@ -13,7 +13,6 @@ Camera::Camera(CameraType _type, WindowData &windowData)
     width = windowData.w;
     height = windowData.h;
     view = glm::lookAt(glm::vec3(0, 0, 20), glm::vec3(0, 0, 0), glm::vec3(0, 1, 0));
-    model = glm::mat4(1.0f);
 }
 
 Camera::~Camera()
@@ -39,7 +38,12 @@ void Camera::set_camera_type(CameraType _type)
     type = _type;
 }
 
-void Camera::getMVP(glm::mat4 &mvp)
+void Camera::getView(glm::mat4 &v)
 {
-    mvp = projection * view * model;
+    v = view;
+}
+
+void Camera::getProjection(glm::mat4 &p)
+{
+    p = projection;
 }

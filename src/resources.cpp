@@ -81,3 +81,12 @@ Texture *get_texture(const std::string &path)
     }
     return res->second;
 }
+
+void resources_destroy()
+{
+    for(auto& i : textures)
+    {
+        glDeleteTextures(1, &i.second->texture_id);
+        delete i.second;
+    }
+}

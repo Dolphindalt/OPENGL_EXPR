@@ -1,10 +1,11 @@
 #include <window.h>
 #include <shaders.h>
 #include <quad.h>
-#include <cube.h>
 #include <camera.h>
 #include <model.h>
 #include <objloader.h>
+#include <resources.h>
+#include <Entity.h>
 
 #include <glm/gtx/transform.hpp>
 
@@ -12,14 +13,14 @@ static void init();
 static bool gl_init();
 static void game_loop();
 static void input();
+static void update();
 static void render();
 static void clean();
 
 bool running = true;
 GLuint shader_program2d, shader_program3d;
 Camera camera;
-TexturedModel dragon;
-glm::mat4 static_model = glm::mat4(1.0f) * glm::scale(glm::vec3(0.1f, 0.1f, 0.1f)), static_cube_model = glm::translate(glm::mat4(1.0f), glm::vec3(0, 5, 8));
+Entity* dragon;
 
 int main()
 {
@@ -31,10 +32,11 @@ static void init()
     window_init();
     gl_init();
     quad_init();
-    cube_init();
     camera = Camera(ORTHO, window);
-    //dragon = load_model("assets/effel-tower.obj");
-    dragon = load_textured_model("assets/fish.obj", "assets/textures/fish.png");
+    TexturedModel tm = load_textured_model("assets/fish.obj", "assets/textures/fish.png");
+    dragon = new Entity(tm);
+    dragon->set_velocity(0.2f, 0.0f, 0.0f);
+    dragon->set_scale(0.1f);
     game_loop();
 }
 
@@ -60,6 +62,8 @@ static void game_loop()
     {
         input();
 
+        update();
+
         render();
     }
     clean();
@@ -78,11 +82,21 @@ static void input()
     }
 }
 
+static void update()
+{
+    dragon->update();
+    
+    if(dragon->get_position().x >= 10)
+        dragon->set_velocity(-0.2, 0.0, 0.0);
+    else if(dragon->get_position().x <= -10)
+        dragon->set_velocity(0.2, 0.0, 0.0);
+}
+
 static void render()
 {
     window.clear();
 
-    glm::mat4 mvp;
+    glm::mat4 projection, view;
 
     shader_start(shader_program3d); // advanced 3d shaders
 
@@ -91,39 +105,37 @@ static void render()
 
     camera.set_camera_type(PERSPECTIVE);
     camera.update();
-    camera.getMVP(mvp);
-    shader_load_mat4(shader_get_uniform_location(shader_program3d, "MVP"), mvp);
-    static_model = static_model * glm::rotate(glm::radians(1.0f), glm::vec3(0, 1, 0));
-    shader_load_mat4(shader_get_uniform_location(shader_program3d, "model"), static_model);
 
-    textured_model_render(dragon);
+    GLuint view_loc = shader_get_uniform_location(shader_program3d, "view"),
+    proj_loc = shader_get_uniform_location(shader_program3d, "projection");
+
+    camera.getView(view);
+    camera.getProjection(projection);
+    shader_load_mat4(view_loc, view);
+    shader_load_mat4(proj_loc, projection);
+
+    shader_load_mat4(shader_get_uniform_location(shader_program3d, "model"), dragon->get_model());
+
+    dragon->render();
 
     shader_stop();
 
     shader_start(shader_program2d); // begin 2d rendering and basic 3d rendering
-    camera.set_camera_type(PERSPECTIVE);
-    camera.update();
-    camera.getMVP(mvp);
-    shader_load_mat4(shader_get_uniform_location(shader_program2d, "MVP"), mvp);
-    static_cube_model = static_cube_model * glm::rotate(glm::radians(1.0f), glm::vec3(0, 1, -1));
-    shader_load_mat4(shader_get_uniform_location(shader_program2d, "model"), static_cube_model);
 
-    cube_render();
-
-    camera.set_camera_type(ORTHO);
+    /*camera.set_camera_type(ORTHO);
     camera.update();
-    camera.getMVP(mvp);
-    shader_load_mat4(shader_get_uniform_location(shader_program2d, "MVP"), mvp);
+
+    camera.getView(view);
+    camera.getProjection(projection);
+    proj_loc = shader_get_uniform_location(shader_program2d, "projection");
+    view_loc = shader_get_uniform_location(shader_program2d, "view");
+    shader_load_mat4(proj_loc, projection);
+    shader_load_mat4(view_loc, view);
+
     glm::mat4 model = glm::mat4(1.0f);
     shader_load_mat4(shader_get_uniform_location(shader_program2d, "model"), model);
 
-    //quad_render();
-
-    model = glm::mat4(1.0f);
-    model = glm::translate(model, glm::vec3(0.5f, 0.5f, 0.0f));
-    shader_load_mat4(shader_get_uniform_location(shader_program2d, "model"), model);
-
-    quad_render();
+    quad_render();*/
 
     shader_stop();
 
@@ -136,6 +148,7 @@ static void clean()
     shader_destroy(shader_program2d);
     shader_destroy(shader_program3d);
     quad_destroy();
-    cube_destroy();
+    delete dragon;
     naked_model_destroy();
+    resources_destroy();
 }
