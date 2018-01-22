@@ -121,6 +121,11 @@ void Entity3D::render()
 
 // BEGIN ENTITY2D
 
+Entity2D::Entity2D() : Entity()
+{
+
+}
+
 Entity2D::Entity2D(Texture *texture) : Entity(), _texture(texture)
 {
 
@@ -137,4 +142,9 @@ void Entity2D::render()
     glBindTexture(GL_TEXTURE_2D, _texture->texture_id);
     quad_render();
     glBindTexture(GL_TEXTURE_2D, 0);
+}
+
+void Entity2D::set_texture(Texture *texture)
+{
+    _texture = texture;
 }

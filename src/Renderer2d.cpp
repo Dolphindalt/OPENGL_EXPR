@@ -1,15 +1,21 @@
 #include <Renderer2d.h>
 
 #include <shaders.h>
+#include <player.h>
+#include <resources.h>
+
+Player *player;
 
 Renderer2d::Renderer2d(GLuint shader_program, Camera &camera) : _shader_program(shader_program), _camera(camera)
 {
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+    player = new Player();
+    player->set_texture(get_texture("assets/textures/grass.png"));
 }
 
 Renderer2d::~Renderer2d()
 {
-
+    delete player;
 }
 
 void Renderer2d::render()
@@ -31,6 +37,11 @@ void Renderer2d::render()
         (*itr)->update();
         (*itr)->render();
     }
+
+    shader_load_mat4(model_location, player->get_model());
+    player->handle_input();
+    player->update();
+    player->render();
 
     glDisable(GL_BLEND);
 

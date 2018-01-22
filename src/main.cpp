@@ -1,4 +1,5 @@
 #include <window.h>
+#include <event.h>
 #include <shaders.h>
 #include <quad.h>
 #include <camera.h>
@@ -91,15 +92,7 @@ static void game_loop()
 
 static void input()
 {
-    SDL_Event e;
-    while(SDL_PollEvent(&e))
-    {
-        switch(e.type)
-        {
-            case SDL_QUIT: running = false; break;
-            default: break;
-        }
-    }
+    handle_input(running);
 }
 
 static void update()

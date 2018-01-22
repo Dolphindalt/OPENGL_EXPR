@@ -47,9 +47,12 @@ private:
 class Entity2D : public Entity
 {
 public:
+    Entity2D();
     Entity2D(Texture *texture);
     Entity2D(const std::string &texture_path);
     void render();
+
+    void set_texture(Texture *texture);
 private:
     Texture *_texture;
 };
