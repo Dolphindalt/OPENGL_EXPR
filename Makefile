@@ -1,6 +1,6 @@
 CC=g++
 FLAGS=-g -Wall -std=c++17 -I./include -I./lib
-LIBS=-lGL -lGLEW -lSDL2
+LIBS=-lGL -lGLEW -lSDL2 -lm
 NAME=HelloWorld
 
 build: 
