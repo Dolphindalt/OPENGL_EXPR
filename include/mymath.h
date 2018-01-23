@@ -4,9 +4,9 @@
 #include <cmath>
 
 #define DISTANCE(type) \
-static inline type distance(##type ax, ##type ay, ##type bx, ##type by) \
+static inline type distance( type ax, type ay, type bx, type by) \
 { \
-    return (##type##)sqrt(pow(ax - bx, 2) + pow(ay - by, 2)); \
+    return ( type )sqrt(pow(ax - bx, 2) + pow(ay - by, 2)); \
 } \
 
 DISTANCE(float)
