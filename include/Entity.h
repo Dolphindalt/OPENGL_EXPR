@@ -3,6 +3,7 @@
 
 #include <model.h>
 #include <glm/glm.hpp>
+#include <shaders.h>
 
 class Entity
 {

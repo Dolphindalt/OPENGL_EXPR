@@ -3,6 +3,7 @@
 #include <mymath.h>
 
 #include <cmath>
+#include <cstdlib>
 
 bool circle_circle_collision(Circle &c1, Circle &c2)
 {

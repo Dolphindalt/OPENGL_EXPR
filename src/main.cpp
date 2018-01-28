@@ -10,6 +10,9 @@
 #include <glm/gtx/transform.hpp>
 #include <Renderer3d.h>
 #include <Renderer2d.h>
+#include <stdint.h>
+
+#define GAME_SPEED ((t - t_prev) * 10.0 / 1000.0)
 
 static void init();
 static bool gl_init();
@@ -79,13 +82,17 @@ static bool gl_init()
 
 static void game_loop()
 {
+    uint32_t t, t_prev;
+
     while(running)
     {
+        t = SDL_GetTicks();
+
         input();
-
         update();
-
         render();
+
+        t_prev = t;
     }
     clean();
 }

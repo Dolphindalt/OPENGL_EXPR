@@ -3,6 +3,8 @@
 #include <SDL2/SDL.h>
 #include <cstdio>
 
+bool key_up, key_down, key_left, key_right;
+
 void handle_input(bool &running)
 {
     SDL_Event e;

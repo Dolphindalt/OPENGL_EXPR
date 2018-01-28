@@ -3,16 +3,19 @@
 
 #include <Entity.h>
 
-typedef enum character { PLAYER1, PLAYER2 } Character;
+typedef enum character { DOLPHIN } Character;
 
 class Player : public Entity2D
 {
 public:
-    Player();
-    void handle_input();
-    void switch_to_character(Character &character);
+    Player(Character character);
+    void update();
+    void load_character(Character &character);
+    void render(GLuint model_loc);
 private:
-    
+    void handle_input();
+
+    Entity2D hitbox;
 };
 
 #endif

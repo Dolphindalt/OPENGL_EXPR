@@ -25,9 +25,9 @@ void Entity::update()
 
 void Entity::build_model_matrix()
 {
-    _model_matrix = glm::mat4(1.0f);
-    
     _position += _velocity;
+
+    _model_matrix = glm::mat4(1.0f);
 
     _model_matrix = _model_matrix * glm::scale(_scale);
 
