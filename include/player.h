@@ -16,6 +16,7 @@ private:
     void handle_input();
 
     Entity2D hitbox;
+    bool hitbox_visible;
 };
 
 #endif

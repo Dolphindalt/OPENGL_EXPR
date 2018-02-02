@@ -1,3 +1,5 @@
+#include <main.h>
+
 #include <window.h>
 #include <event.h>
 #include <shaders.h>
@@ -10,7 +12,6 @@
 #include <glm/gtx/transform.hpp>
 #include <Renderer3d.h>
 #include <Renderer2d.h>
-#include <stdint.h>
 
 #define GAME_SPEED ((t - t_prev) * 10.0 / 1000.0)
 
@@ -29,6 +30,8 @@ Entity3D *dragon;
 Entity2D *grass, *grass2;
 Renderer3d *renderer3d;
 Renderer2d *renderer2d;
+
+uint32_t ticks, ticks_prev;
 
 int main()
 {
@@ -54,8 +57,10 @@ static void init()
 
     grass = new Entity2D("assets/textures/grass.png");
     grass->set_position(-1.0f, -1.0f, 0.0f);
+    grass->set_scale(0.5f);
     grass2 = new Entity2D("assets/textures/grass.png");
-    grass2->set_position(0.0, -1.0f, 0.0);
+    grass2->set_position(1.0f, -1.0f, 0.0);
+    grass2->set_scale(0.5f);
 
     renderer2d = new Renderer2d(shader_program2d, camera_o);
     renderer2d->add_entity(grass);
@@ -82,17 +87,15 @@ static bool gl_init()
 
 static void game_loop()
 {
-    uint32_t t, t_prev;
-
     while(running)
     {
-        t = SDL_GetTicks();
+        ticks = SDL_GetTicks();
 
         input();
         update();
         render();
 
-        t_prev = t;
+        ticks_prev = ticks;
     }
     clean();
 }
@@ -139,4 +142,9 @@ static void clean()
     delete grass2;
     naked_model_destroy();
     resources_destroy();
+}
+
+uint32_t get_game_ticks()
+{
+    return ticks;
 }

@@ -2,22 +2,22 @@
 
 #include <event.h>
 
-#define PLAYER_VELOCITY (0.112f);
+#define PLAYER_VELOCITY (0.112f)
 
 Player::Player(Character character) : Entity2D()
 {
-    set_position(glm::vec3(0.0f, 0.0f, 50.0f));
+    set_position(glm::vec3(0.0f, 0.0f, 49.0f));
     load_character(character);
     set_scale(0.1);
     hitbox.set_texture(get_texture("assets/textures/player/playerhitbox.png"));
-    hitbox.set_scale(0.03);
-    hitbox.set_position(0.0f, 0.0f, 40.0f);
+    hitbox.set_scale(0.1);
+    hitbox.set_position(0.0f, 0.0f, 50.0f);
 }
 
 void Player::update()
 {
-    Entity::update();
     handle_input();
+    Entity::update();
     hitbox.update();
 }
 
@@ -35,10 +35,13 @@ void Player::load_character(Character &character)
 
 void Player::render(GLuint model_loc)
 {
-    shader_load_mat4(model_loc, hitbox.get_model());
-    hitbox.render();
     shader_load_mat4(model_loc, get_model());
     Entity2D::render();
+    if(hitbox_visible)
+    {
+        shader_load_mat4(model_loc, hitbox.get_model());
+        hitbox.render();
+    }
 }
 
 void Player::handle_input()
@@ -60,6 +63,9 @@ void Player::handle_input()
     {
         velocity.x += PLAYER_VELOCITY;
     }
+    
+    hitbox_visible = key_lshift;
+
     set_velocity(velocity);
     hitbox.set_velocity(velocity);
 }
