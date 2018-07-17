@@ -1,5 +1,7 @@
 #include <main.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <window.h>
 #include <event.h>
 #include <shaders.h>
@@ -13,8 +15,6 @@
 #include <Renderer3d.h>
 #include <Renderer2d.h>
 
-#define GAME_SPEED ((t - t_prev) * 10.0 / 1000.0)
-
 static void init();
 static bool gl_init();
 static void game_loop();
@@ -23,6 +23,8 @@ static void update();
 static void render();
 static void clean();
 
+#define TICK_INTERVAL 60.0
+
 bool running = true;
 GLuint shader_program2d, shader_program3d;
 Camera camera_p, camera_o;
@@ -30,8 +32,6 @@ Entity3D *dragon;
 Entity2D *grass, *grass2;
 Renderer3d *renderer3d;
 Renderer2d *renderer2d;
-
-uint32_t ticks, ticks_prev;
 
 int main()
 {
@@ -87,15 +87,33 @@ static bool gl_init()
 
 static void game_loop()
 {
+    double delta = 0;
+    Uint64 last_time = SDL_GetPerformanceCounter();
+    double amount_of_ticks = 60.0;
+    double ns = 1000000000.0 / amount_of_ticks;
+    Uint32 timer = SDL_GetTicks();
+    int frames = 0;
     while(running)
     {
-        ticks = SDL_GetTicks();
+        Uint64 now = SDL_GetPerformanceCounter();
+        delta += (now - last_time) / ns;
+        last_time = now;
+
+        while(delta >= 1.0) 
+        {
+            update();
+            delta--;
+        }
 
         input();
-        update();
         render();
 
-        ticks_prev = ticks;
+        frames++;
+        if(SDL_GetTicks() - timer > 1000)
+        {
+            timer += 1000;
+            frames = 0;
+        }
     }
     clean();
 }
@@ -146,5 +164,5 @@ static void clean()
 
 uint32_t get_game_ticks()
 {
-    return ticks;
+    return SDL_GetTicks();
 }

@@ -1,5 +1,7 @@
 #include <camera.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/gtx/transform.hpp>
 #include <shaders.h>
 

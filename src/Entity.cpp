@@ -1,5 +1,7 @@
 #include <Entity.h>
 
+#define GLM_ENABLE_EXPERIMENTAL
+
 #include <glm/gtx/transform.hpp>
 #include <quad.h>
 #include <resources.h>

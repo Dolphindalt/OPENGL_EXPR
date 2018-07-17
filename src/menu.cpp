@@ -19,6 +19,7 @@ void menu_enter_loop()
                 tick_main_menu();
                 break;
             default:
+                break;
         }
     }
 }

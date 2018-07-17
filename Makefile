@@ -12,7 +12,6 @@ objs: $(wildcard */*.cpp)
 
 link:
 	$(CC) $(FLAGS) $(wildcard *.o) $(LIBS) -o $(NAME).out
-	make clean
 
 clean:
 	rm -f *.o
