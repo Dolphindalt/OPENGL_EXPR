@@ -11,8 +11,8 @@ public:
     Entity();
     virtual ~Entity();
 
-    void update();
-    virtual void render() = 0;
+    void update(double delta);
+    virtual void render(GLuint model_loc) = 0;
 
     void set_position(float x, float y, float z);
     void set_position(glm::vec3 nv);
@@ -31,7 +31,7 @@ private:
     bool _matrix_needs_update, _velocity_zero;
     glm::vec3 _position, _rotation, _scale;
     glm::vec3 _velocity;
-    glm::mat4 _model_matrix;
+    glm::mat4 _model_matrix = glm::mat4(0.0);
 
     void build_model_matrix();
 };
@@ -40,7 +40,7 @@ class Entity3D : public Entity
 {
 public:
     Entity3D(TexturedModel &texturedmodel);
-    void render();
+    void render(GLuint model_loc);
 private:
     TexturedModel _texturedmodel;
 };
@@ -51,7 +51,7 @@ public:
     Entity2D();
     Entity2D(Texture *texture);
     Entity2D(const std::string &texture_path);
-    void render();
+    void render(GLuint model_loc);
 
     void set_texture(Texture *texture);
 private:

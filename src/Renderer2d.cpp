@@ -4,17 +4,17 @@
 #include <player.h>
 #include <resources.h>
 
-Player *player;
-
-Renderer2d::Renderer2d(GLuint shader_program, Camera &camera) : _shader_program(shader_program), _camera(camera)
+Renderer2d::Renderer2d(std::vector<Entity2D *> *entities, Camera &camera) : _camera(camera)
 {
+    const std::string vertex2d_path = "shaders/vertex2d.glsl", fragment2d_path = "shaders/fragment2d.glsl";
+    _shader_program = shader_init(vertex2d_path, fragment2d_path);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-    player = new Player(DOLPHIN);
+    _entities = entities;
 }
 
 Renderer2d::~Renderer2d()
 {
-    delete player;
+    shader_destroy(_shader_program);
 }
 
 void Renderer2d::render()
@@ -30,22 +30,13 @@ void Renderer2d::render()
      
     glEnable(GL_BLEND);
 
-    for(auto itr = _entities.begin(); itr != _entities.end(); itr++)
+    for(auto i = _entities->size(); i-- > 0;)
     {
-        shader_load_mat4(model_location, (*itr)->get_model());
-        (*itr)->update();
-        (*itr)->render();
+        Entity2D *current = (*_entities)[i];
+        shader_load_mat4(model_location, current->get_model());
+        current->render(model_location);
     }
 
-    player->update();
-    player->render(model_location);
-
-    glDisable(GL_BLEND);
-
     shader_stop();
-}
-
-void Renderer2d::add_entity(Entity2D *entity)
-{
-    _entities.push_back(entity);
+    glDisable(GL_BLEND);
 }

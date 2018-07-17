@@ -16,7 +16,7 @@ Entity::~Entity()
 
 }
 
-void Entity::update()
+void Entity::update(double delta)
 {
     if(!_velocity_zero) _matrix_needs_update = true;
     if(_matrix_needs_update)
@@ -116,7 +116,7 @@ Entity3D::Entity3D(TexturedModel &texturedmodel) : Entity(), _texturedmodel(text
 
 }
 
-void Entity3D::render()
+void Entity3D::render(GLuint model_loc)
 {
     textured_model_render(_texturedmodel);
 }
@@ -138,7 +138,7 @@ Entity2D::Entity2D(const std::string &texture_path) : Entity()
     _texture = get_texture(texture_path);
 }
 
-void Entity2D::render()
+void Entity2D::render(GLuint model_loc)
 {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _texture->texture_id);

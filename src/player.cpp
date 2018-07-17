@@ -1,8 +1,9 @@
 #include <player.h>
 
 #include <event.h>
+#include <iostream>
 
-#define PLAYER_VELOCITY (0.112f)
+#define PLAYER_VELOCITY (3.0f)
 
 Player::Player(Character character) : Entity2D()
 {
@@ -14,11 +15,11 @@ Player::Player(Character character) : Entity2D()
     hitbox.set_position(0.0f, 0.0f, 50.0f);
 }
 
-void Player::update()
+void Player::update(double delta)
 {
-    handle_input();
-    Entity::update();
-    hitbox.update();
+    Entity::update(delta);
+    handle_input(delta);
+    hitbox.update(delta);
 }
 
 void Player::load_character(Character &character)
@@ -36,32 +37,33 @@ void Player::load_character(Character &character)
 void Player::render(GLuint model_loc)
 {
     shader_load_mat4(model_loc, get_model());
-    Entity2D::render();
+    Entity2D::render(model_loc);
     if(hitbox_visible)
     {
         shader_load_mat4(model_loc, hitbox.get_model());
-        hitbox.render();
+        hitbox.render(model_loc);
     }
 }
 
-void Player::handle_input()
+void Player::handle_input(double delta)
 {
     glm::vec3 velocity = glm::vec3(0.0f);
+    double dx = PLAYER_VELOCITY * delta;
     if(key_up)
     {
-        velocity.y += PLAYER_VELOCITY;
+        velocity.y += dx;
     }
     if(key_down)
     {
-        velocity.y -= PLAYER_VELOCITY;
+        velocity.y -= dx;
     }
     if(key_left)
     {
-        velocity.x -= PLAYER_VELOCITY;
+        velocity.x -= dx;
     }
     if(key_right)
     {
-        velocity.x += PLAYER_VELOCITY;
+        velocity.x += dx;
     }
     
     hitbox_visible = key_lshift;

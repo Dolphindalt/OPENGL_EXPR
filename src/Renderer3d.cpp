@@ -2,14 +2,16 @@
 
 #include <shaders.h>
 
-Renderer3d::Renderer3d(GLuint shader_program, Camera &camera) : _shader_program(shader_program), _camera(camera)
+Renderer3d::Renderer3d(std::vector<Entity3D *> *entities, Camera &camera) : _camera(camera)
 {
-
+    const std::string vertex3d_path = "shaders/vertex3d.glsl", fragment3d_path = "shaders/fragment3d.glsl";
+    _shader_program = shader_init(vertex3d_path, fragment3d_path);
+    _entities = entities;
 }
 
 Renderer3d::~Renderer3d()
 {
-
+    shader_destroy(_shader_program);
 }
 
 void Renderer3d::render()
@@ -25,18 +27,13 @@ void Renderer3d::render()
 
     GLuint model_location = shader_get_uniform_location(_shader_program, "model");
 
-    for(auto itr = _entities.begin(); itr != _entities.end(); itr++)
+    for(auto i = _entities->size(); i-- > 0;)
     {
-        shader_load_mat4(model_location, (*itr)->get_model());
-        (*itr)->update();
-        (*itr)->render();
+        Entity3D *current = (*_entities)[i];
+        shader_load_mat4(model_location, current->get_model());
+        current->render(model_location);
     }
 
     shader_stop();
     glDisable(GL_CULL_FACE);
-}
-
-void Renderer3d::add_entity(Entity3D *entity)
-{
-    _entities.push_back(entity);
 }
