@@ -8,17 +8,9 @@ typedef enum current_state { MAIN, DIFFICULTY_SELECT, CHARACTER_SELECT} CurrentS
 
 typedef enum main_menu_options { PLAY, PRACTICE, REPLAY, SETTINGS, QUIT } MainMenuOptions;
 
-GLuint shader_program;
-CurrentState current;
-Entity2D background;
-
-void menu_init(GLuint shader_program2d_id);
-
-void menu_enter_loop();
+extern void (*menu_update_function)(double delta);
+extern void (*menu_render_function)(void);
 
 void toggle_main_menu();
-void draw_main_menu();
-void tick_main_menu();
-
 
 #endif

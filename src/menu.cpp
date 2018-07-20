@@ -2,44 +2,35 @@
 
 #include <resources.h>
 
-void menu_init(GLuint shader_program2d_id)
-{
-    shader_program = shader_program2d_id;
-}
+CurrentState current;
+Entity2D background;
 
-void menu_enter_loop()
-{
-    current = MAIN;
-    for(;;)
-    {
-        switch(current)
-        {
-            case MAIN:
-                draw_main_menu();
-                tick_main_menu();
-                break;
-            default:
-                break;
-        }
-    }
-}
+extern GLuint _shader_program_2d;
+
+void (*menu_update_function)(double delta);
+void (*menu_render_function)(void);
+
+static void draw_main_menu();
+static void tick_main_menu(double delta);
 
 void toggle_main_menu()
 {
     current = MAIN;
     background.set_texture(get_texture("assets/textures/menu/mainmenu.png"));
+    menu_render_function = draw_main_menu;
+    menu_update_function = tick_main_menu;
 }
 
 void draw_main_menu()
 {
-    glUseProgram(shader_program);
+    glUseProgram(_shader_program_2d);
     
     background.render();
 
     glUseProgram(0);
 }
 
-void tick_main_menu()
+void tick_main_menu(double delta)
 {
 
 }

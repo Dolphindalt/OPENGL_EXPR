@@ -3,33 +3,26 @@
 #define GLM_ENABLE_EXPERIMENTAL
 
 #include <window.h>
+#include <GameState.h>
 #include <event.h>
 #include <shaders.h>
 #include <quad.h>
 #include <camera.h>
-#include <model.h>
-#include <objloader.h>
-#include <resources.h>
-#include <Entity.h>
 #include <glm/gtx/transform.hpp>
-#include <EntityService.h>
-#include <player.h>
 
 #include <cassert>
 
 static void init();
 static bool gl_init();
 static void game_loop();
-static void input();
-static void render();
 static void clean();
 
 #define TICK_INTERVAL 60.0
 
 bool running = true;
 Camera camera_p, camera_o;
-EntityService *es;
-Player *player;
+
+extern GameState *currentState;
 
 int main(int argc, char *argv[])
 {
@@ -42,27 +35,9 @@ static void init()
     window.set_clear_color(0.1, 0.3, 0.7, 1.0);
     gl_init();
     quad_init();
+    init_gamestates();
 
-    player = new Player(DOLPHIN);
-
-    es = new EntityService();
-
-    TexturedModel tm = load_textured_model("assets/fish.obj", "assets/textures/fish.png");
-    Entity3D *dragon = new Entity3D(tm);
-    dragon->set_velocity(0.0f, 0.0f, 0.0f);
-    dragon->set_scale(0.1f);
-
-    es->addEntity(dragon);
-
-    Entity2D *grass = new Entity2D("assets/textures/grass.png");
-    grass->set_position(-1.0f, -1.0f, 0.0f);
-    grass->set_scale(0.5f);
-    Entity2D *grass2 = new Entity2D("assets/textures/grass.png");
-    grass2->set_position(1.0f, -1.0f, 0.0);
-    grass2->set_scale(0.5f);
-
-    es->addEntity(grass);
-    es->addEntity(grass2);
+    switchToState(0);
 
     game_loop();
 }
@@ -93,13 +68,14 @@ static void game_loop()
 
         while(delta >= 1.0) 
         {
-            input();
-            es->updateFlatEntities(delta);
-            es->updateThiccEntities(delta);
+            handle_input(running);
+            currentState->update(delta);
             delta--;
         }
 
-        render();
+        window.clear();
+        currentState->render();
+        window.swap_buffer();
 
         frames++;
         if(SDL_GetTicks() - timer > 1000)
@@ -111,22 +87,10 @@ static void game_loop()
     clean();
 }
 
-static void input()
-{
-    handle_input(running);
-}
-
-static void render()
-{
-    window.clear();
-    es->render();
-    window.swap_buffer();
-}
-
 static void clean()
 {
-    delete es;
     window_destroy();
+    cleanup_gamestates();
     quad_destroy();
     naked_model_destroy();
     resources_destroy();

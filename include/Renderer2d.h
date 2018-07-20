@@ -14,7 +14,6 @@ public:
 
     void render();
 private:
-    GLuint _shader_program;
     Camera _camera;
     std::vector<Entity2D *> *_entities;
 };
