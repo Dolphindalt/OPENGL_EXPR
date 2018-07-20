@@ -31,7 +31,7 @@ void Renderer3d::render()
     {
         Entity3D *current = (*_entities)[i];
         shader_load_mat4(model_location, current->get_model());
-        current->render(model_location);
+        current->render();
     }
 
     shader_stop();

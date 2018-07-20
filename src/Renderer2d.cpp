@@ -4,6 +4,8 @@
 #include <player.h>
 #include <resources.h>
 
+extern Player *player;
+
 Renderer2d::Renderer2d(std::vector<Entity2D *> *entities, Camera &camera) : _camera(camera)
 {
     const std::string vertex2d_path = "shaders/vertex2d.glsl", fragment2d_path = "shaders/fragment2d.glsl";
@@ -34,8 +36,10 @@ void Renderer2d::render()
     {
         Entity2D *current = (*_entities)[i];
         shader_load_mat4(model_location, current->get_model());
-        current->render(model_location);
+        current->render();
     }
+    
+    player->render(model_location);
 
     shader_stop();
     glDisable(GL_BLEND);

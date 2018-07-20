@@ -116,7 +116,7 @@ Entity3D::Entity3D(TexturedModel &texturedmodel) : Entity(), _texturedmodel(text
 
 }
 
-void Entity3D::render(GLuint model_loc)
+void Entity3D::render()
 {
     textured_model_render(_texturedmodel);
 }
@@ -138,7 +138,7 @@ Entity2D::Entity2D(const std::string &texture_path) : Entity()
     _texture = get_texture(texture_path);
 }
 
-void Entity2D::render(GLuint model_loc)
+void Entity2D::render()
 {
     glActiveTexture(GL_TEXTURE0);
     glBindTexture(GL_TEXTURE_2D, _texture->texture_id);

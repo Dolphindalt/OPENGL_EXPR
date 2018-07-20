@@ -29,8 +29,9 @@ static void clean();
 bool running = true;
 Camera camera_p, camera_o;
 EntityService *es;
+Player *player;
 
-int main()
+int main(int argc, char *argv[])
 {
     init();
 }
@@ -42,11 +43,13 @@ static void init()
     gl_init();
     quad_init();
 
+    player = new Player(DOLPHIN);
+
     es = new EntityService();
 
     TexturedModel tm = load_textured_model("assets/fish.obj", "assets/textures/fish.png");
     Entity3D *dragon = new Entity3D(tm);
-    dragon->set_velocity(0.5f, 0.0f, 0.0f);
+    dragon->set_velocity(0.0f, 0.0f, 0.0f);
     dragon->set_scale(0.1f);
 
     es->addEntity(dragon);
@@ -60,8 +63,6 @@ static void init()
 
     es->addEntity(grass);
     es->addEntity(grass2);
-
-    es->addEntity(new Player(DOLPHIN));
 
     game_loop();
 }
@@ -92,12 +93,12 @@ static void game_loop()
 
         while(delta >= 1.0) 
         {
+            input();
             es->updateFlatEntities(delta);
             es->updateThiccEntities(delta);
             delta--;
         }
 
-        input();
         render();
 
         frames++;

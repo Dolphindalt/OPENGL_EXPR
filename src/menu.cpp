@@ -7,7 +7,7 @@ void menu_init(GLuint shader_program2d_id)
     shader_program = shader_program2d_id;
 }
 
-void menu_enter_loop(GLuint model_location)
+void menu_enter_loop()
 {
     current = MAIN;
     for(;;)
@@ -15,7 +15,7 @@ void menu_enter_loop(GLuint model_location)
         switch(current)
         {
             case MAIN:
-                draw_main_menu(model_location);
+                draw_main_menu();
                 tick_main_menu();
                 break;
             default:
@@ -30,11 +30,11 @@ void toggle_main_menu()
     background.set_texture(get_texture("assets/textures/menu/mainmenu.png"));
 }
 
-void draw_main_menu(GLuint model_location)
+void draw_main_menu()
 {
     glUseProgram(shader_program);
     
-    background.render(model_location);
+    background.render();
 
     glUseProgram(0);
 }

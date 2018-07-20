@@ -17,7 +17,7 @@ void menu_init(GLuint shader_program2d_id);
 void menu_enter_loop();
 
 void toggle_main_menu();
-void draw_main_menu(GLuint model_location);
+void draw_main_menu();
 void tick_main_menu();
 
 

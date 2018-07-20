@@ -1,9 +1,8 @@
 #include <player.h>
 
 #include <event.h>
-#include <iostream>
 
-#define PLAYER_VELOCITY (3.0f)
+#define PLAYER_VELOCITY (0.1f)
 
 Player::Player(Character character) : Entity2D()
 {
@@ -37,11 +36,11 @@ void Player::load_character(Character &character)
 void Player::render(GLuint model_loc)
 {
     shader_load_mat4(model_loc, get_model());
-    Entity2D::render(model_loc);
+    Entity2D::render();
     if(hitbox_visible)
     {
         shader_load_mat4(model_loc, hitbox.get_model());
-        hitbox.render(model_loc);
+        hitbox.render();
     }
 }
 

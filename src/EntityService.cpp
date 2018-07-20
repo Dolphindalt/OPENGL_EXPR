@@ -1,5 +1,7 @@
 #include <EntityService.h>
 
+extern Player *player;
+
 EntityService::EntityService()
 {
     _flat_entities = new std::vector<Entity2D *>();
@@ -26,6 +28,7 @@ void EntityService::updateFlatEntities(double delta) const
 {
     for(auto i = _flat_entities->size(); i-- > 0;)
         (*_flat_entities)[i]->update(delta);
+    player->update(delta);
 }
 
 void EntityService::updateThiccEntities(double delta) const
@@ -36,8 +39,8 @@ void EntityService::updateThiccEntities(double delta) const
 
 void EntityService::render() const
 {
-    _renderer2d->render();
     _renderer3d->render();
+    _renderer2d->render();
 }
 
 void EntityService::addEntity(Entity2D *entity)
