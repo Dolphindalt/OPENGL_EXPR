@@ -20,7 +20,7 @@ static void clean();
 #define TICK_INTERVAL 60.0
 
 bool running = true;
-Camera camera_p, camera_o;
+Camera *camera_p, *camera_o;
 
 extern GameState *currentState;
 
@@ -35,6 +35,8 @@ static void init()
     window.set_clear_color(0.1, 0.3, 0.7, 1.0);
     gl_init();
     quad_init();
+    camera_o = new Camera(ORTHO, window);
+    camera_p = new Camera(PERSPECTIVE, window);
     init_gamestates();
 
     switchToState(0);
@@ -90,6 +92,8 @@ static void game_loop()
 static void clean()
 {
     window_destroy();
+    delete camera_o;
+    delete camera_p;
     cleanup_gamestates();
     quad_destroy();
     naked_model_destroy();

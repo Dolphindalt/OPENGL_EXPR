@@ -12,12 +12,10 @@ class EntityService {
 private:
     std::vector<Entity2D *> *_flat_entities;
     std::vector<Entity3D *> *_thic_entities;
-    Camera _camera_p;
-    Camera _camera_o;
     Renderer2d *_renderer2d;
     Renderer3d *_renderer3d;
 public:
-    EntityService();
+    EntityService(Renderer2d *renderer2d, Renderer3d *renderer3d);
     ~EntityService();
 
     void updateFlatEntities(double delta) const;

@@ -9,13 +9,10 @@
 class Renderer2d
 {
 public:
-    Renderer2d(std::vector<Entity2D *> *entities, Camera &camera);
+    Renderer2d();
     ~Renderer2d();
 
-    void render();
-private:
-    Camera _camera;
-    std::vector<Entity2D *> *_entities;
+    void render(std::vector<Entity2D *> *entities);
 };
 
 #endif

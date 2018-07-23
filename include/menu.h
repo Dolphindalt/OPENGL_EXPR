@@ -11,6 +11,9 @@ typedef enum main_menu_options { PLAY, PRACTICE, REPLAY, SETTINGS, QUIT } MainMe
 extern void (*menu_update_function)(double delta);
 extern void (*menu_render_function)(void);
 
+void init_menus();
+std::vector<Entity2D *> *getMenuEntities();
 void toggle_main_menu();
+void destroy_menus();
 
 #endif

@@ -9,14 +9,10 @@
 class Renderer3d
 {
 public:
-    Renderer3d(std::vector<Entity3D *> *entities, Camera &camera);
+    Renderer3d();
     ~Renderer3d();
 
-    void render();
-private:
-    GLuint _shader_program;
-    Camera _camera;
-    std::vector<Entity3D *> *_entities;
+    void render(std::vector<Entity3D *> *entities);
 };
 
 #endif

@@ -2,14 +2,12 @@
 
 extern Player *player;
 
-EntityService::EntityService()
+EntityService::EntityService(Renderer2d *renderer2d, Renderer3d* renderer3d)
 {
     _flat_entities = new std::vector<Entity2D *>();
     _thic_entities = new std::vector<Entity3D *>();
-    _camera_p = Camera(PERSPECTIVE, window);
-    _camera_o = Camera(ORTHO, window);
-    _renderer2d = new Renderer2d(_flat_entities, _camera_o);
-    _renderer3d = new Renderer3d(_thic_entities, _camera_p);
+    _renderer2d = renderer2d;
+    _renderer3d = renderer3d;
 }
 
 EntityService::~EntityService()
@@ -39,8 +37,8 @@ void EntityService::updateThiccEntities(double delta) const
 
 void EntityService::render() const
 {
-    _renderer3d->render();
-    _renderer2d->render();
+    _renderer3d->render(_thic_entities);
+    _renderer2d->render(_flat_entities);
 }
 
 void EntityService::addEntity(Entity2D *entity)

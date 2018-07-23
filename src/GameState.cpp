@@ -12,11 +12,17 @@ GameState *currentState;
 #define GAMESTATES_LENGTH 2
 GameState **gamestates;
 
+Renderer2d *renderer2d;
+Renderer3d *renderer3d;
+
 void init_gamestates()
 {
     gamestates = new GameState *[2];
     gamestates[0] = new MenuState();
     gamestates[1] = new PlayState();
+
+    renderer2d = new Renderer2d();
+    renderer3d = new Renderer3d();
 }
 
 void switchToState(int state)
@@ -38,12 +44,13 @@ GameState::~GameState()
 
 MenuState::MenuState()
 {
+    init_menus();
     toggle_main_menu();
 }
 
 MenuState::~MenuState()
 {
-    
+    destroy_menus();
 }
 
 void MenuState::update(double delta)
@@ -53,13 +60,13 @@ void MenuState::update(double delta)
 
 void MenuState::render()
 {
-    (*menu_render_function)();
+    renderer2d->render(getMenuEntities());
 }
 
 PlayState::PlayState()
 {
     player = new Player(DOLPHIN);
-    _es = new EntityService();
+    _es = new EntityService(renderer2d, renderer3d);
 
     TexturedModel tm = load_textured_model("assets/fish.obj", "assets/textures/fish.png");
     Entity3D *dragon = new Entity3D(tm);
